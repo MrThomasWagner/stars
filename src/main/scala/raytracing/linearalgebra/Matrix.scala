@@ -1,36 +1,4 @@
-package matrix
-
-sealed trait Linear {
-  def *(other: Linear): Linear = (this, other) match {
-    case (v: Vector, m: Matrix) =>
-      Vector(m.cols.map(c => c * v).map(_.sum))
-    case (m1: Matrix, m2: Matrix) =>
-      Matrix(m1.rows.zip(m2.cols).map {
-        case (a, b) => a * b
-      })
-    case _ => ???
-  }
-}
-
-case class Vector(as: Array[Double]) extends Linear {
-  val length: Int = as.length
-
-  lazy val sum: Double = as.sum
-
-  def apply(i: Int): Double = as(i)
-
-  def *(other: Vector): Vector = {
-    require(length == other.length, "Incompatible vector multiplication, vectors must be of the same size")
-    Vector(as.zip(other.as).map(a => a._1 * a._2))
-  }
-
-  override def toString: String = as.mkString("< ", ", ", " >")
-}
-
-object Vector {
-  def apply(ds: Double*): Vector = Vector(ds.toArray)
-
-}
+package raytracing.linearalgebra
 
 case class Matrix(private val entries: Array[Array[Double]]) extends Linear {
   val height: Int = entries.length
