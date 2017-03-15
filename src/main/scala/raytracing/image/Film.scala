@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
-import raytracing.Point
+import raytracing.linearalgebra.Point
 
 class Film(aspectRatio: (Int, Int), depth: Int) {
   private val (width, height) = aspectRatio

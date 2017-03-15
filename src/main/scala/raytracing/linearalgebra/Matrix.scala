@@ -1,15 +1,15 @@
 package raytracing.linearalgebra
 
-case class Matrix(private val entries: Array[Array[Double]]) extends Linear {
+case class Matrix(private val entries: Vector[Vector[Double]]) extends Linear {
   val height: Int = entries.length
   val width: Int = entries.head.length
   require(entries.forall(_.length == width))
-  lazy val rows: Array[Vector] = entries.map(row => Vector(row))
-  lazy val cols: Array[Vector] = (0 until width).map(col).toArray
+  lazy val rows: Vector[EuclideanVector] = entries.map(row => EuclideanVector(row))
+  lazy val cols: Vector[EuclideanVector] = (0 until width).map(col).toVector
 
-  def col(i: Int): Vector = Vector(entries.map(c => c(i)))
+  def col(i: Int): EuclideanVector = EuclideanVector(entries.map(c => c(i)))
 
-  def row(i: Int): Vector = Vector(entries(i))
+  def row(i: Int): EuclideanVector = EuclideanVector(entries(i))
 
   def apply(x: Int, y: Int): Double = entries(x)(y)
 
@@ -19,21 +19,4 @@ case class Matrix(private val entries: Array[Array[Double]]) extends Linear {
 object Matrix {
   implicit val asDouble: (Int => Double) = _.toDouble
   implicit val asDoubleIterable: (List[Int] => List[Double]) = _.map(_.toDouble)
-
-  def apply(vectors: Array[Vector]): Matrix = Matrix(vectors.map(_.as))
-
-  def apply(iterables: Iterable[Double]*): Matrix = Matrix(iterables.map(_.toArray).toArray)
 }
-
-object MatrixMain extends App {
-  import Matrix._
-
-  println(Matrix(List(1, 2), List(3, 4)))
-
-  println(Vector(1, 2, 3) * Matrix(
-    List(1, 1, 1),
-    List(1, 1, 1),
-    List(1, 1, 1)
-  ))
-}
-
